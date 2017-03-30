@@ -1,0 +1,79 @@
+<md-content layout="column">
+    <div layout-gt-md="row" layout-padding flex>
+        <div layout="column" layout-padding flex="50">
+            <div layout="row" layout-align="start end">
+                <md-input-container>
+                    <label>Location Name <span style="color:red">*</span></label>
+                    <input type="text" ng-model="location.name"/>
+                </md-input-container>
+            </div>
+
+
+            Date/Time
+            <div layout="row" layout-align="start" flex>
+                <div layout="row" layout-align="space-around" flex="75">
+                    <md-input-container>
+                        <label>Start Time</label>
+                        <input type="text" ng-model="location.hours.open"/>
+                    </md-input-container>
+                    <md-input-container>
+                        <label>End Time</label>
+                        <input type="text" ng-model="location.hours.close"/>
+                    </md-input-container>
+                </div>
+            </div>
+            <div layout="row" layout-align="start" flex>
+                <div layout="row" layout-padding>
+                    <md-checkbox ng-model="location.days_of_week.sunday">
+                        Su
+                    </md-checkbox>
+                    <md-checkbox ng-model="location.days_of_week.monday">
+                        M
+                    </md-checkbox>
+                    <md-checkbox ng-model="location.days_of_week.tuesday">
+                        Tu
+                    </md-checkbox>
+                    <md-checkbox ng-model="location.days_of_week.wednesday">
+                        W
+                    </md-checkbox>
+                    <md-checkbox ng-model="location.days_of_week.thursday">
+                        Th
+                    </md-checkbox>
+                    <md-checkbox ng-model="location.days_of_week.friday">
+                        F
+                    </md-checkbox>
+                    <md-checkbox ng-model="location.days_of_week.saturday">
+                        Sa
+                    </md-checkbox>
+                </div>
+            </div>
+
+        </div>
+        <md-divider></md-divider>
+        <div layout="column" layout-padding flex="50">
+            <div layout="row">
+                <md-button class="md-primary md-raised" flex="25">
+                    <label for="file-input">Choose Image(s)</label>
+                </md-button>
+                <input id="file-input"
+                       type='file'
+                       ng-model="uploadedImages"
+                       parser="resizeImage"
+                       base-sixty-four-input
+                       maxsize="1000"
+                       multiple
+                       ng-show="false"
+                >
+            </div>
+        </div>
+    </div>
+
+    <div layout="row" layout-align="start" flex>
+        <div layout="row" layout-align="space-bettwen" flex="50">
+            <md-button class="blueButton" ng-click="create(location)" ng-show="!location._id">CREATE</md-button>
+            <md-button class="blueButton" ng-click="update(location)" ng-show="!!location._id">UPDATE</md-button>
+            <md-button class="ghostButton">CANCEL</md-button>
+        </div>
+    </div>
+</md-content>
+
