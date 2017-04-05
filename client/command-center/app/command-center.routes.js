@@ -86,4 +86,9 @@ commandCenterApp.config(function($urlRouterProvider, $stateProvider, $locationPr
             templateUrl:'app/panel/manage/event/event-modify.html',
             controller:'event-controller'
         })
+        .state('messages', {
+            url: '/message',
+            templateUrl:'app/panel/message/message.html',
+            controller:'message-controller'
+        })
 });

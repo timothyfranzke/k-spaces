@@ -1,4 +1,4 @@
-commandCenterApp.factory('baseService', function($http, $q){
+baseServiceApp.factory('baseService', function($http, $q){
     var MakeRequest = function (request) {
         var defer = $q.defer();
         $http(request)

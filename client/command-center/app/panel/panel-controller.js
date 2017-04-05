@@ -1,5 +1,15 @@
 commandCenterApp.controller('panel-controller', function($mdSidenav, $timeout, $scope, commandCenterService){
-    $scope.title = commandCenterService.title;
+    $scope.isLoading = false;
+
+    var changeTitle = function(title){
+        $scope.title = title;
+    };
+    var changeLoader = function(isLoading){
+        $scope.isLoading = isLoading;
+    };
+
+    commandCenterService.setTitleObserver(changeTitle);
+    commandCenterService.setLoadObserver(changeLoader);
 
     function debounce(func, wait, context) {
         var timer;

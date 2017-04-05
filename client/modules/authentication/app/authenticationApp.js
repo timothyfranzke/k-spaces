@@ -1,0 +1,1 @@
+var authApp = angular.module('authentication-app', ['base-service']);

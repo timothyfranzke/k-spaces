@@ -13,6 +13,9 @@ var client = 'client';
 var serverDir = 'server';
 var commandCenterDest = dest + "/public/command-center";
 var commandCenterSrc = client + "/command-center";
+var loginDest = dest + "/public/login";
+var loginSrc = client + "/login";
+var modulesSrc = client + "/modules";
 var serverDest = dest + "/server";
 
 
@@ -40,11 +43,6 @@ gulp.task('bowercss', function() {
         .pipe(plugins.concat('main.css'))
         .pipe(gulp.dest(dest + '/public/css'))
     ;
-});
-
-gulp.task('html', function(){
-    gulp.src([commandCenterSrc + '/**/*.html', commandCenterSrc + 'index.html'] )
-        .pipe(gulp.dest(commandCenterDest));
 });
 
 gulp.task('lib', function(){
@@ -85,16 +83,40 @@ gulp.task('hint', function(){
         .pipe(plugins.jshint.reporter( 'default' ))
 });
 
-gulp.task('modules', function(){
+gulp.task('command-center', function(){
     gulp.src([commandCenterSrc + '/command-center.app.js',
         commandCenterSrc + '/command-center.routes.js',
         commandCenterSrc + '/services/*/js',
         commandCenterSrc + '/app/**/*.js',
         commandCenterSrc + '/app/admin/**/*.js'])
-        .pipe(plugins.concat('modules.js'))
+        .pipe(plugins.concat('command-center.js'))
         .pipe(plugins.uglify({mangle: false}))
         .pipe(gulp.dest(commandCenterDest + '/js'));
+    gulp.src([commandCenterSrc + '/**/*.html', commandCenterSrc + 'index.html'] )
+        .pipe(gulp.dest(commandCenterDest));
 });
+
+gulp.task('login', function(){
+    gulp.src([loginSrc + '/login.app.js',
+        loginSrc + '/login.routes.js',
+        loginSrc + '/services/*/js',
+        loginSrc + '/app/**/*.js'])
+        .pipe(plugins.concat('login.js'))
+        .pipe(plugins.uglify({mangle: false}))
+        .pipe(gulp.dest(loginDest + '/js'));
+    gulp.src([loginSrc + '/**/*.html', loginSrc + 'index.html'] )
+        .pipe(gulp.dest(loginDest));
+});
+
+gulp.task('application', ['command-center', 'login']);
+
+gulp.task('modules', function(){
+   gulp.src([modulesSrc + '/**/*.js'])
+       .pipe(plugins.concat('modules.js'))
+       .pipe(plugins.uglify({mangle: false}))
+       .pipe(gulp.dest(dest + '/public/js'));
+});
+
 gulp.task('server', function(){
     gulp.src([server + '**/*.js'])
         .pipe(gulp.dest(serverDest));
@@ -112,7 +134,7 @@ gulp.task('packages', function () {
         .pipe(gulp.dest(dest))
 });
 
-gulp.task('build', ['bowerjs', 'bowercss', 'html', 'modules', 'server', 'app', 'lib', 'css', 'img', 'packages'], function(){
+gulp.task('build', ['bowerjs', 'bowercss', 'modules', 'application', 'server', 'app', 'lib', 'css', 'img', 'packages'], function(){
 
 
 });

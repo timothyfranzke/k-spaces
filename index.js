@@ -10,6 +10,7 @@ var db;
 
 app.use(bodyparser.json({limit: '50mb'}));
 app.use("/", express.static(__dirname + '/public'));
+app.use("/login", express.static(__dirname + '/public/login'));
 app.use("/command-center", express.static(__dirname + '/public/command-center'));
 
 mongoClient.connect('mongodb://spaces-app:TimDaveAndSteve@ds145370.mlab.com:45370/spaces', function(err, database){
@@ -21,7 +22,12 @@ mongoClient.connect('mongodb://spaces-app:TimDaveAndSteve@ds145370.mlab.com:4537
     });
 });
 
+app.post('/api/login', function(req, res){
+    console.log(req);
+    res.send("123456");
+});
 
+//entity
 app.get('/api/entity/:id', function(req,res){
     var id = mongo.ObjectID(req.params.id);
     db.collection('entity').find( {"_id" : id}).toArray(function(err,result){
@@ -254,6 +260,46 @@ app.delete('/api/event/:id', function(req, res){
     })
 });
 
+//search
+app.get('/api/search/:term', function(req, res){
+    var term = req.params.term;
+    var type = 'user';
+
+    switch(type)
+    {
+        case 'user':
+            searchUserByName(term, function(result){
+                res.json(result);
+            });
+    }
+});
+
 var getEntityId = function(){
     return '58dbe71a278b2216b1c1abe4';
+};
+
+//db actions
+var searchUserByName = function(term, callback){
+    var expression = new RegExp('^' + term);
+    console.log(expression);
+    db.collection('user')
+        .find({
+                $or:[
+                    {"legal_name.first":expression},
+                    {"legal_name:last":expression}
+                ]
+        },
+            {legal_name:1, preferred_name:1}
+
+        )
+        .toArray(function(err, result){
+            if (err) return console.log(err);
+            console.log(result);
+            callback(result);
+        });
+    // db.collection('location').find({"name":new RegExp('^Cant')}).toArray(function(err, result){
+    //     if (err) return console.log(err);
+    //     console.log(result);
+    //     callback(result);
+    // })
 };

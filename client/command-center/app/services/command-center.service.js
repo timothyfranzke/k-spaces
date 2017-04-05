@@ -1,7 +1,30 @@
 commandCenterApp.factory('commandCenterService', function(baseService) {
     var title = '';
+    var loader = false;
+    var titleObservers = [];
+    var loadObservers = [];
     return {
-        title:title,
+        setTitle: function(name){
+            title = name;
+            titleObservers.forEach(function(callback){
+                callback(title);
+            });
+        },
+        setTitleObserver: function(callback){
+            titleObservers.push(callback);
+        },
+        setLoader: function(isLoading){
+            loader = isLoading;
+            loadObservers.forEach(function(callback){
+                callback(loader);
+            });
+        },
+        setLoadObserver: function(callback){
+            loadObservers.push(callback);
+        },
+        getTitle: function(){
+            return title;
+        },
         getEntity: function(){
 
         },
@@ -16,6 +39,9 @@ commandCenterApp.factory('commandCenterService', function(baseService) {
         },
         updateUser: function(data, id){
             return baseService.PUT(USER, data, id);
+        },
+        search:function(state, term){
+            return baseService.GET(SEARCH, term);
         }
     }
 });
